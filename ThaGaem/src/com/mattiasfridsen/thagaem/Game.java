@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 
 import com.mattiasfridsen.thagaem.graphics.Screen;
 import com.mattiasfridsen.thagaem.input.Keyboard;
+import com.mattiasfridsen.thagaem.level.Level;
+import com.mattiasfridsen.thagaem.level.RandomLevel;
 
 public class Game extends Canvas implements Runnable {
 
@@ -29,6 +31,7 @@ public class Game extends Canvas implements Runnable {
 	private JFrame 		frame;	
 	private Screen 		screen;	
 	private Keyboard 	key;
+	private Level		level;
 	
 	private BufferedImage image	= new BufferedImage(width, height,
 			BufferedImage.TYPE_INT_RGB);
@@ -45,6 +48,7 @@ public class Game extends Canvas implements Runnable {
 		screen	= new Screen(width, height); 
 		frame 	= new JFrame();
 		key 	= new Keyboard();
+		level	= new RandomLevel(64, 64);
 		
 		addKeyListener(key);
 	}
@@ -120,7 +124,7 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		screen.clear();
-		screen.render(x, y);
+		level.render(x, y, screen);
 		
 		for (int i = 0; i < pixels.length; i++ ) {
 			pixels[i] = screen.pixels[i];
