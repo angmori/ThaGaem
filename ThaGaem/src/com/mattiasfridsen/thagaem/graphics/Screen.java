@@ -2,12 +2,14 @@ package com.mattiasfridsen.thagaem.graphics;
 
 import java.util.Random;
 
+import com.mattiasfridsen.thagaem.level.tile.Tile;
+
 public class Screen {
 
 	public final int MAP_SIZE      = 64;
 	public final int MAP_SIZE_MASK = MAP_SIZE - 1;
-	private int      width;
-	private int      height;
+	public int       width;
+	public int       height;
 	private int      numTiles      = MAP_SIZE * MAP_SIZE;
 	public int[]     pixels;
 	public int[]     tiles         = new int[numTiles];
@@ -42,8 +44,23 @@ public class Screen {
 				
 				if (xp < 0 || xp >= width) 	{ continue; }
 				
-				pixels[(xp) + (yp) * width] = Sprite.grass.pixels[(x & 15)
+				pixels[xp + yp * width] = Sprite.grass.pixels[(x & 15)
 				        + (y & 15) * Sprite.grass.SIZE];
+			}
+		}
+	}
+	
+	public void renderTile(int xp, int yp, Tile tile) {
+		for (int y = 0; y < tile.sprite.SIZE; y++) {
+			int ya = y + yp; 
+			
+			for (int x = 0; x < tile.sprite.SIZE; x++) {
+				int xa = x + xp;
+				
+				if(xa < 0 || xa >= width || ya < 0 || ya >= width) { break; }
+				
+				pixels[xa + ya * width] = tile.sprite.pixels[x + 
+				                           y * tile.sprite.SIZE];
 			}
 		}
 	}

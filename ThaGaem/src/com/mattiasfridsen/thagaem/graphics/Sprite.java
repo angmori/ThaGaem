@@ -2,20 +2,27 @@ package com.mattiasfridsen.thagaem.graphics;
 
 public class Sprite {
 
-	public final int 		SIZE;
-	private int             x;
-	private int             y;
-	public int[]            pixels;
-	private SpriteSheet     sheet;
+	public final int     SIZE;
+	private int          x;
+	private int          y;
+	public int[]         pixels;
+	private SpriteSheet  sheet;
 
-	public static Sprite    grass = new Sprite(16, 0, 0, SpriteSheet.tiles);
+	public static Sprite grass      = new Sprite(16, 0, 0, SpriteSheet.tiles);
+	public static Sprite voidSprite = new Sprite(10, 0x45A62D);
+
+	public Sprite(int size, int colour) {
+		SIZE = size;
+		pixels = new int[SIZE * SIZE];
+		setColour(colour);
+	}
 
 	public Sprite(int size, int x, int y, SpriteSheet sheet) {
-		SIZE 		= size;
-		this.x		= x * SIZE;
-		this.y 		= y * SIZE;
-		this.sheet 	= sheet;
-		pixels 		= new int[SIZE * SIZE];
+		SIZE = size;
+		this.x = x * SIZE;
+		this.y = y * SIZE;
+		this.sheet = sheet;
+		pixels = new int[SIZE * SIZE];
 		load();
 	}
 
@@ -25,6 +32,12 @@ public class Sprite {
 				pixels[x + y * SIZE] = sheet.pixels[(x + this.x) + (y + this.y)
 				        * sheet.SIZE];
 			}
+		}
+	}
+
+	private void setColour(int colour) {
+		for (int i = 0; i < SIZE * SIZE; i++) {
+			pixels[i] = colour;
 		}
 	}
 }
