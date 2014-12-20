@@ -10,6 +10,7 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import com.mattiasfridsen.thagaem.entity.mob.Player;
 import com.mattiasfridsen.thagaem.graphics.Screen;
 import com.mattiasfridsen.thagaem.input.Keyboard;
 import com.mattiasfridsen.thagaem.level.Level;
@@ -24,14 +25,12 @@ public class Game extends Canvas implements Runnable {
 	public 	static 	int height	= width / 16 * 9;
 	public 	static 	int scale	= 3;
 	
-	int	x = 0;
-	int	y = 0;	
-	
 	private Thread 		gameThread;	
 	private JFrame 		frame;	
 	private Screen 		screen;	
 	private Keyboard 	key;
 	private Level		level;
+	private Player		player;
 	
 	private BufferedImage image	= new BufferedImage(width, height,
 			BufferedImage.TYPE_INT_RGB);
@@ -49,6 +48,7 @@ public class Game extends Canvas implements Runnable {
 		frame 	= new JFrame();
 		key 	= new Keyboard();
 		level	= new RandomLevel(64, 64);
+		player	= new Player(key);
 		
 		addKeyListener(key);
 	}
@@ -110,10 +110,7 @@ public class Game extends Canvas implements Runnable {
 
 	public void update() {
 		key.update();
-		if (key.up) 	{ y--; }
-		if (key.down) 	{ y++; }
-		if (key.left) 	{ x--; }
-		if (key.right) 	{ x++; }
+		player.update();
 	}
 	
 	public void render() {
@@ -123,8 +120,12 @@ public class Game extends Canvas implements Runnable {
 			return;
 		}
 		
+		int xScroll = player.x - screen.width / 2;
+		int yScroll = player.y - screen.height / 2;
+		
 		screen.clear();
-		level.render(x, y, screen);
+		level.render(xScroll, yScroll, screen);
+		player.render(screen);
 		
 		for (int i = 0; i < pixels.length; i++ ) {
 			pixels[i] = screen.pixels[i];
