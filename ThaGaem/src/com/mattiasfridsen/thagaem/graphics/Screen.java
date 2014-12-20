@@ -2,6 +2,7 @@ package com.mattiasfridsen.thagaem.graphics;
 
 import java.util.Random;
 
+import com.mattiasfridsen.thagaem.entity.mob.Player;
 import com.mattiasfridsen.thagaem.level.tile.Tile;
 
 public class Screen {
@@ -37,16 +38,46 @@ public class Screen {
 	public void renderTile(int xp, int yp, Tile tile) {
 		xp -= xOffset;
 		yp -= yOffset;
+		
 		for (int y = 0; y < tile.sprite.SIZE; y++) {
-			int ya = y + yp; 
+			int ya = y + yp;
 			
 			for (int x = 0; x < tile.sprite.SIZE; x++) {
 				int xa = x + xp;
 				
-				if(xa < 0 || xa >= width || ya < 0 || ya >= width) { break; }
+				if(xa < -tile.sprite.SIZE || xa >= width 
+						|| ya < 0 || ya >= height) { break; }
+				if (xa < 0) { xa = 0; }
 				
 				pixels[xa + ya * width] = tile.sprite.pixels[x + 
 				                           y * tile.sprite.SIZE];
+			}
+		}
+	}
+	
+	public void renderPlayer(int xp, int yp, Sprite sprite) {
+		xp -= xOffset;
+		yp -= yOffset;
+		
+		for (int y = 0; y < 16; y++) {
+			int ya = y + yp;
+			
+			for (int x = 0; x < 16; x++) {
+				int xa = x + xp;
+				
+				if(xa < -16 || xa >= width 
+						|| ya < 0 || ya >= height) { break; }
+				if (xa < 0) { xa = 0; }
+				
+				int col = sprite.pixels[x + y * 16];
+				//System.out.println(col);
+				/* Used to check what the value of the color pink (255 R, 0 G,
+				 * 255 B) is. It should be hex 0xFFFF00FF, or dec 4294902015, 
+				 * but is instead hex C1FF00FF or dec -1040252673. This
+				 * is easy to find out, since the first pixel to be drawn will
+				 * be pink, and thus the first value printed will represent it.
+				 */
+				if (col != 0xC1FF00FF) pixels[xa + ya * width] = col;
 			}
 		}
 	}
